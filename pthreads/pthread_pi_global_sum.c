@@ -10,6 +10,7 @@ int number_of_threads, precision;
 // thread_sum stores the individual threads' local sums
 float *thread_sum;
 
+float serial_pi(int precision);
 void *thread_function(void *rank);
 
 int main(int argc, char* argv[]){
