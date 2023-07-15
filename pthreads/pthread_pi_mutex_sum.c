@@ -62,7 +62,7 @@ int main(int argc, char* argv[]){
     // The process checks for any remaining calculations
     if (remaining_steps == precision) {
         printf("Pi can only be calculated serially\n");
-        return 34;
+        return 4;
     }
     else {
         int start_index = precision - remaining_steps;
