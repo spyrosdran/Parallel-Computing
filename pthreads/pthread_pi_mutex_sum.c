@@ -81,6 +81,9 @@ int main(int argc, char* argv[]){
 
     printf("Sum calculated with threads: %f\n", global_sum);
 
+    // Destroy mutex lock
+    pthread_mutex_destroy(&lock);
+
     free(threads);
 
     return 0;
