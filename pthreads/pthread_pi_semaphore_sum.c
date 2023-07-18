@@ -16,12 +16,14 @@ sem_t lock;
 float serial_pi(int precision);
 void *thread_function(void *rank);
 
-int main(int argc, char* argv[]){
+int main(int argc, char *argv[])
+{
 
     float local_sum = 0;
 
     // Invalid input
-    if (argc != 3) {
+    if (argc != 3)
+    {
         printf("Usage: <precision> <number_of_threads>\n");
         return 1;
     }
@@ -29,7 +31,7 @@ int main(int argc, char* argv[]){
     // Retrieve values from the command line
     precision = atoi(argv[1]);
     number_of_threads = atoi(argv[2]);
-    
+
     // Serial calculation of pi
     float serial_sum = serial_pi(precision);
     printf("Serially calculated sum: %f\n", serial_sum);
@@ -40,12 +42,13 @@ int main(int argc, char* argv[]){
     int remaining_steps = precision % number_of_threads;
 
     // Invalid calculation of steps per thread
-    if (steps_per_thread <= 0) {
+    if (steps_per_thread <= 0)
+    {
         printf("Invalid steps per thread: %d\n", steps_per_thread);
         return 2;
     }
 
-    pthread_t *threads = (pthread_t*) malloc (number_of_threads * sizeof(pthread_t));
+    pthread_t *threads = (pthread_t *)malloc(number_of_threads * sizeof(pthread_t));
 
     // Initialize the semaphore lock
     // 0 is for sharing between threads
@@ -54,18 +57,20 @@ int main(int argc, char* argv[]){
 
     // Create threads
     for (int i = 0; i < number_of_threads; i++)
-        pthread_create(&threads[i], NULL, thread_function, (void *) i);
+        pthread_create(&threads[i], NULL, thread_function, (void *)i);
 
     // Wait for threads to finish
     for (int i = 0; i < number_of_threads; i++)
         pthread_join(threads[i], NULL);
 
     // The process checks for any remaining calculations
-    if (remaining_steps == precision) {
+    if (remaining_steps == precision)
+    {
         printf("Pi can only be calculated serially\n");
         return 4;
     }
-    else {
+    else
+    {
         int start_index = precision - remaining_steps;
         float factor;
 
@@ -75,7 +80,7 @@ int main(int argc, char* argv[]){
             factor = -1;
 
         for (int i = start_index; i < precision; i++, factor = -factor)
-            local_sum += factor/(2*i+1);
+            local_sum += factor / (2 * i + 1);
     }
 
     global_sum *= 4;
@@ -88,23 +93,22 @@ int main(int argc, char* argv[]){
     free(threads);
 
     return 0;
-    
-
 }
 
-float serial_pi(int precision) {
+float serial_pi(int precision)
+{
 
     float sum = 0.0;
     float factor = 1.0;
 
     for (int i = 0; i < precision; i++, factor = -factor)
-        sum += factor/(2*i+1);
+        sum += factor / (2 * i + 1);
 
     return 4 * sum;
-
 }
 
-void *thread_function(void *rank) {
+void *thread_function(void *rank)
+{
 
     // Retrieve the thread's rank
     int *local_ptr = &rank;
@@ -135,5 +139,4 @@ void *thread_function(void *rank) {
     sem_post(&lock);
 
     pthread_exit(NULL);
-
 }
