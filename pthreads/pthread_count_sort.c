@@ -110,7 +110,6 @@ void *thread_function(void *rank)
     int *local_ptr = &rank;
     int local_rank = *local_ptr;
 
-    // Create local frequency table
     int position[steps_per_thread];
     int number[steps_per_thread];
     int counter = 0;
